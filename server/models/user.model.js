@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt"
 import {config} from '../config.js'
+import 'express-async-errors';
 
 const userSchema = new mongoose.Schema(
     {
@@ -24,12 +25,10 @@ userSchema.methods.generateAuthToken = function(){
 
 userSchema.statics.findByCredentials = async ({email, password}) => {
     const user = await User.findOne({email: email})
-    console.log(user)
     if(!user){
         throw new Error('Unable to login')
     }
     const isMatch = await bcrypt.compare(password, user.password)
-
     if(!isMatch){
         throw new Error('Unable to login')
     }
