@@ -2,7 +2,8 @@ export const Constants = {
     routes: {
         login: '/login',
         register: '/register',
-        home: '/'
+        home: '/',
+        profile: '/users/:userId'
     }, 
 
     localStorage: {
@@ -15,6 +16,8 @@ export const Constants = {
 
     path: {
         login: '/users/login',
-        register: '/users/register'
+        register: '/users/register',
+        user: '/users',
+        image: '/images'
     }
 }

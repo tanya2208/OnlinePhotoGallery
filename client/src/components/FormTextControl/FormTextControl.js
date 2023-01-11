@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Field, ErrorMessage } from "formik";
 
 function FormTextControl(props) {
@@ -11,4 +11,4 @@ function FormTextControl(props) {
   );
 }
 
-export default FormTextControl;
+export default memo(FormTextControl);

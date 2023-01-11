@@ -17,6 +17,12 @@ const userSchema = new mongoose.Schema(
     {collection: 'user-data'}
 )
 
+userSchema.virtual('images', {
+    ref: 'ImageData',
+    localField: '_id',
+    foreignField: 'user'
+})
+
 userSchema.methods.generateAuthToken = function(){
     const user = this
     const token = jwt.sign({ _id: user._id.toString()}, config.jwtSecret)
