@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { isLogin } from "../utils";
 
 function PublicRoute({ component: Component, restricted, ...rest }) {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setLoggedIn(isLogin());
+  });
+
   return (
-    (isLogin() && restricted) ?  <Navigate to="/" /> : <Component {...rest} />
+    (loggedIn && restricted) ?  <Navigate to="/" /> : <Component {...rest} />
   );
 }
 

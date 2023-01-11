@@ -1,10 +1,11 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import { sendRequest } from "../../common/fetch";
+import { sendRequest } from "../../services/fetch.service";
+import { setToken } from "../../services/auth.service";
 import { Constants } from "../../constants";
-import { setToken } from "../../common/localstorage";
+import FormTextControl from "../../components/FormTextControl/FormTextControl";
 
 const RegisterSchema = yup.object().shape({
   email: yup
@@ -24,74 +25,52 @@ const RegisterSchema = yup.object().shape({
 
 function Register() {
   const [errorMessage, setErrorMessage] = useState("");
+  const [initialState] = useState({
+    email: "",
+    password: "",
+    name: "",
+    surname: "",
+    city: "",
+    occupation: "",
+    nickname: "",
+  });
   const navigate = useNavigate();
+
+  const handleSubmit = useCallback((values) => {
+    sendRequest({
+      url: Constants.http.url + Constants.path.register,
+      method: "POST",
+      body: values,
+    })
+      .then((res) => {
+        if (res.token) {
+          setToken(res.token);
+          setErrorMessage("");
+          navigate(Constants.routes.home);
+        } else setErrorMessage("Unable to login. Please try again.");
+      })
+      .catch((err) => {
+        setErrorMessage(err.message);
+      });
+  });
   return (
     <div>
       <h1>Register</h1>
       {errorMessage && <div>{errorMessage}</div>}
 
       <Formik
-        initialValues={{
-          email: "",
-          password: "",
-          name: "",
-          surname: "",
-          city: "",
-          occupation: "",
-          nickname: "",
-        }}
-        onSubmit={async (values) => {
-          sendRequest({
-            url: Constants.http.url + Constants.path.register,
-            method: "POST",
-            body: values,
-          })
-            .then((res) => {
-              if (res.token) {
-                setToken(res.token);
-                setErrorMessage("");
-                navigate(Constants.routes.home);
-              } else setErrorMessage("Unable to login. Please try again.");
-            })
-            .catch((err) => {
-              setErrorMessage(err.message);
-            });
-        }}
+        initialValues={initialState}
+        onSubmit={handleSubmit}
         validationSchema={RegisterSchema}
       >
         <Form>
-          <label htmlFor="name">Name</label>
-          <Field id="name" name="name" type="string" />
-          <ErrorMessage component="div" name="name" />
-
-          <label htmlFor="surname">Surname</label>
-          <Field id="surname" name="surname" type="string" />
-          <ErrorMessage component="div" name="surname" />
-
-          <label htmlFor="nickname">Nickname</label>
-          <Field id="nickname" name="nickname" type="string" />
-          <ErrorMessage component="div" name="nickname" />
-
-          <label htmlFor="email">Email</label>
-          <Field id="email" name="email" type="email" />
-          <ErrorMessage component="div" name="email" />
-
-          <label htmlFor="city">City</label>
-          <Field id="city" name="city" type="string" />
-          <ErrorMessage component="div" name="city" />
-
-          <label htmlFor="occupation">Occupation</label>
-          <Field id="occupation" name="occupation" type="occupation" />
-          <ErrorMessage component="div" name="occupation" />
-
-          <label htmlFor="password">Password</label>
-          <Field id="password" name="password" type="password" />
-          <ErrorMessage
-            component="div"
-            name="password"
-            className="invalid-feedback"
-          />
-
+          <FormTextControl label="Name" type="string" name="name"></FormTextControl>
+          <FormTextControl label="Surname" type="string" name="surname"></FormTextControl>
+          <FormTextControl label="Nickname" type="string" name="nickname"></FormTextControl>
+          <FormTextControl label="Email" type="email" name="email"></FormTextControl>
+          <FormTextControl label="City" type="string" name="city"></FormTextControl>
+          <FormTextControl label="Occupation" type="string" name="occupation"></FormTextControl>
+          <FormTextControl label="Password" type="password" name="password"></FormTextControl>
           <button type="submit">Register</button>
         </Form>
       </Formik>

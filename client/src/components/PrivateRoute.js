@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { isLogin } from "../utils";
 
 function PrivateRoute({ component: Component, ...rest }) {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setLoggedIn(isLogin());
+  });
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        isLogin() ? <Component {...props} /> : <Navigate to="/login" />
+        loggedIn ? <Component {...props} /> : <Navigate to="/login" />
       }
     />
   );
