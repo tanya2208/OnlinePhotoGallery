@@ -7,10 +7,12 @@ import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
+import Header from "./components/Header"
 
 function App() {
   return (
     <>
+      <Header></Header>
       <BrowserRouter>
         <Routes>
           <Route

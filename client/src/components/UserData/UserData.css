@@ -1,0 +1,24 @@
+.user-data-wrapper{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 20px;
+}
+.avatar{
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    background: grey;
+}
+.user-data{
+    margin-left: 50px;
+}
+.user-data .nickname{
+    margin-bottom: 30px;
+}
+.user-data p{
+    line-height: 30px;
+}
+.add-image-btn{
+    margin: 20px 10px;
+}

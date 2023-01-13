@@ -3,16 +3,19 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { sendRequest } from "../../services/fetch.service";
 import { Constants } from "../../constants";
+import Image from "../../components/Image";
+import UserData from "../../components/UserData/UserData";
+import './Profile.css'; 
 
-function Home() {
+function Profile() {
   const [user, setUser] = useState({});
   const [images, setImages] = useState([]);
-  const [link, setLink] = useState("");
+  // const [link, setLink] = useState("");
 
   const params = useParams();
 
   //user who logged in
-  const userId = useSelector((state) => state.authReducer.userId);
+  // const userId = useSelector((state) => state.authReducer.userId);
 
   function getUserData() {
     sendRequest({
@@ -32,46 +35,17 @@ function Home() {
     getUserData();
   }, []);
 
-  const handleAddImage = useCallback(() => {
-    console.log(link);
-    sendRequest({
-      url: Constants.http.url + Constants.path.image,
-      method: "POST",
-      body: { link, user: userId },
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  });
 
   return (
-    <>
-      <h1>Profile</h1>
-      <div className="user-data">
-        <h2>{user.nickname}</h2>
-        <p>
-          {user.name} {user.surname}
-        </p>
-        <p>{user.email}</p>
-        <p>{user.occupation}</p>
-        <p>{user.city}</p>
-      </div>
-      <input
-        type="string"
-        onChange={useCallback((event) => setLink(event.target.value))}
-        value={link}
-      />
-      <button onClick={handleAddImage}>Add Image</button>
+    <div className="profile-wrapper">
+      <UserData user={user}></UserData>
       <div className="image-container">
         {images.map((img) => {
-          return <img key={img._id} src={img.link} alt="" />;
+          return <div key={img._id} className="image image-wrapper"><Image link={img.link}></Image></div>
         })}
       </div>
-    </>
+    </div>
   );
 }
 
-export default memo(Home);
+export default memo(Profile);

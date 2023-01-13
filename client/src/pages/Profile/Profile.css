@@ -1,0 +1,20 @@
+.profile-wrapper{
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+.image-container{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+.image-container .image{
+    height: calc(70vw / 3 - 40px);
+    width: calc(70vw / 3 - 40px);
+}
+.image-container .image-wrapper{
+    margin: 20px;
+    cursor: pointer;
+}
