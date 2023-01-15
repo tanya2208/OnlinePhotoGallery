@@ -5,17 +5,15 @@ import { sendRequest } from "../../services/fetch.service";
 import { Constants } from "../../constants";
 import Image from "../../components/Image";
 import UserData from "../../components/UserData/UserData";
-import './Profile.css'; 
+import "./Profile.css";
+import store from "../../store";
+import { UPDATE_USER } from "../../actions/types";
 
 function Profile() {
-  const [user, setUser] = useState({});
-  const [images, setImages] = useState([]);
-  // const [link, setLink] = useState("");
 
   const params = useParams();
 
-  //user who logged in
-  // const userId = useSelector((state) => state.authReducer.userId);
+  const userState = useSelector((state) => state.userReducer);
 
   function getUserData() {
     sendRequest({
@@ -23,8 +21,11 @@ function Profile() {
       method: "GET",
     })
       .then((res) => {
-        setUser(res.user);
-        setImages(res.images);
+        store.dispatch({
+          type: UPDATE_USER,
+          user: res.user,
+          images: res.images,
+        });
       })
       .catch((err) => {
         console.log(err.message);
@@ -35,14 +36,18 @@ function Profile() {
     getUserData();
   }, []);
 
-
   return (
     <div className="profile-wrapper">
-      <UserData user={user}></UserData>
+      {userState.user && <UserData user={userState.user}></UserData>}
       <div className="image-container">
-        {images.map((img) => {
-          return <div key={img._id} className="image image-wrapper"><Image link={img.link}></Image></div>
-        })}
+        {userState.images &&
+          userState.images.map((img) => {
+            return (
+              <div key={img._id} className="image image-wrapper">
+                <Image link={img.link}></Image>
+              </div>
+            );
+          })}
       </div>
     </div>
   );
