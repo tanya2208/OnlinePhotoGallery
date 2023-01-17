@@ -8,6 +8,7 @@ import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import Profile from "./pages/Profile/Profile";
 import Header from "./components/Header"
+import Post from "./pages/Post/Post";
 
 function App() {
   return (
@@ -30,6 +31,10 @@ function App() {
           <Route
             element={<PublicRoute restricted={false} component={Profile} />}
             path={Constants.routes.profile}
+          />
+          <Route
+            element={<PublicRoute restricted={false} component={Post} />}
+            path={Constants.routes.post}
           />
         </Routes>
       </BrowserRouter>

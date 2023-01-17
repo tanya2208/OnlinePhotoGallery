@@ -30,6 +30,6 @@ router.post("/users/login", async (req, res, next) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  const user = await User.findById(req.params.id).populate('images');
+  const user = await User.findById(req.params.id).populate({path: 'images', options: { sort: { 'time': -1 } } });
   return res.json({ status: 200, user, images: user.images });
 });

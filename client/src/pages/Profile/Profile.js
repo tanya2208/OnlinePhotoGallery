@@ -1,40 +1,25 @@
-import React, { useState, memo, useEffect, useCallback } from "react";
+import React, { memo, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { sendRequest } from "../../services/fetch.service";
-import { Constants } from "../../constants";
+import { useNavigate, useParams } from "react-router-dom";
 import Image from "../../components/Image";
 import UserData from "../../components/UserData/UserData";
 import "./Profile.css";
-import store from "../../store";
-import { UPDATE_USER } from "../../actions/types";
+import { getUser } from "../../services/user.service";
 
 function Profile() {
 
   const params = useParams();
-
+  const navigate = useNavigate();
   const userState = useSelector((state) => state.userReducer);
 
-  function getUserData() {
-    sendRequest({
-      url: Constants.http.url + Constants.path.user + "/" + params.userId,
-      method: "GET",
-    })
-      .then((res) => {
-        store.dispatch({
-          type: UPDATE_USER,
-          user: res.user,
-          images: res.images,
-        });
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  }
-
   useEffect(() => {
-    getUserData();
-  }, []);
+    getUser(params.userId)
+  }, [params.userId]);
+
+  const openPostHandler = useCallback((event) => {
+    let id = event.currentTarget.getAttribute('data-id')
+    navigate('/posts/'+id) //fix hardcode
+  });
 
   return (
     <div className="profile-wrapper">
@@ -43,7 +28,7 @@ function Profile() {
         {userState.images &&
           userState.images.map((img) => {
             return (
-              <div key={img._id} className="image image-wrapper">
+              <div key={img._id} data-id={img._id} className="image image-wrapper" onClick={openPostHandler}>
                 <Image link={img.link}></Image>
               </div>
             );

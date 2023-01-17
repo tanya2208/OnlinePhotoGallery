@@ -13,8 +13,9 @@ export const sendRequest = async ({
     body: body ? JSON.stringify(body) : null
   };
   if (queryParams) {
-    url = `${url}?${queryString.stringify(queryParams)}`;
+    url = `${url}?${queryParams}`;
   }
+  console.log(queryParams,url)
   return await fetch(url, options).then(res => {
     if (res.status === 200) {
       return res.json();

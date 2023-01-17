@@ -3,7 +3,8 @@ export const Constants = {
         login: '/login',
         register: '/register',
         home: '/',
-        profile: '/users/:userId'
+        profile: '/users/:userId',
+        post: '/posts/:postId'
     }, 
 
     localStorage: {
@@ -18,6 +19,7 @@ export const Constants = {
         login: '/users/login',
         register: '/users/register',
         user: '/users',
-        image: '/images'
+        image: '/images',
+        post: '/posts'
     }
 }

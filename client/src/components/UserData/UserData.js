@@ -2,7 +2,8 @@ import React, { memo, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import AddImage from "../AddImage";
-import './UserData.css'
+import './UserData.css';
+import { getAdminAccess } from "../../services/user.service";
 
 function UserData(props) {
   const [access, setAccess] = useState(false);
@@ -10,7 +11,7 @@ function UserData(props) {
   const userId = useSelector((state) => state.authReducer.userId);
 
   useEffect(() => {
-    setAccess(userId === params.userId)
+    setAccess(getAdminAccess(userId, params.userId))
   })
 
   return (

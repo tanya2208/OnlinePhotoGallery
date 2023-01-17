@@ -4,11 +4,9 @@ import { sendRequest } from "../services/fetch.service";
 import { Constants } from "../constants";
 import store from "../store";
 import { ADD_IMAGE } from "../actions/types";
-import { useSelector } from "react-redux";
 
 function AddImage(props) {
   const [link, setLink] = useState("");
-  const userState = useSelector((state) => state.userReducer);
 
   const handleAddImage = useCallback(() => {
     sendRequest({
@@ -18,6 +16,7 @@ function AddImage(props) {
     })
       .then((res) => {
         store.dispatch({ type: ADD_IMAGE, image: res.image });
+        setLink('')
       })
       .catch((err) => {
         console.log(err.message);
